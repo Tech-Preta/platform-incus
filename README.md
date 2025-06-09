@@ -68,6 +68,7 @@ flowchart TD
   DOCS -.-> VAULTMOD
   DOCS -.-> K8SMOD
   DOCS -.-> CRDSMOD
+  DOCS -.-> K8SSERV
 ```
 
 ## 🎯 Visão Geral
