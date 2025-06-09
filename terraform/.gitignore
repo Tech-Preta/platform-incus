@@ -1,0 +1,56 @@
+\
+# Local Terraform state and plans
+*.tfstate
+*.tfstate.*.backup
+*.tfplan
+*.tfvars
+*.tfvars.json
+*.auto.tfvars
+*.auto.tfvars.json
+
+# Crash log
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Infracost
+.infracost/
+*.infracost.json
+
+# Terraform locks
+.terraform.lock.hcl
+
+# Terraform plugin cache and state
+.terraform/
+
+# Vault secrets file (manter a entrada existente)
+vault_secret.md
+
+# Kubeconfig files (geralmente específicos do ambiente e podem conter credenciais)
+kubeconfig
+**/kubeconfig
+
+# Arquivos específicos de IDE
+.vscode/
+.idea/
+*.swp
+*~
+
+# Arquivos de sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos de log específicos do projeto (se houver)
+# *.log
+
+# Arquivos temporários ou de build específicos do projeto
+# /tmp/
+# /build/
+
+# Arquivos JSON de backup do Vault (se não devem ser versionados)
+vault-cluster-vault-*.json
+**/*-????????-????-????-????-????????????.json
+
+terraform/vault_secret.md
