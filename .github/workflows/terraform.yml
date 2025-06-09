@@ -1,0 +1,38 @@
+name: Terraform Format, Validate, and Test
+
+permissions:
+  contents: read
+  # Adicione permissões extras apenas se necessário
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4.2.2
+
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v3.1.2
+      with:
+        terraform_version: 1.9.3
+
+    - name: Terraform Init
+      run: terraform init -upgrade
+
+    - name: Terraform Format
+      run: terraform fmt -check -recursive -diff
+
+    - name: Terraform Validate
+      run: terraform validate
+
+    - name: Terraform Test
+      run: terraform test

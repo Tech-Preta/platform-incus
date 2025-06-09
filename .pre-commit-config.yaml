@@ -1,0 +1,28 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.3.0
+    hooks:
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.96.1
+    hooks:
+      - id: terraform_fmt
+      - id: terraform_docs
+        args:
+          - --args=--sort-by=required
+          - md
+      - id: terraform_tflint
+        args:
+          - --args=--color
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.26.0
+    hooks:
+      - id: gitleaks
+      
+  # Detect hardcoded secrets
+- repo: https://github.com/gitleaks/gitleaks
+  rev: v8.26.0
+  hooks:
+  - id: gitleaks

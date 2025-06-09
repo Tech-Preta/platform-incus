@@ -1,0 +1,8 @@
+version: 2
+updates:
+- package-ecosystem: "github-actions" # Para GitHub Actions
+  directory: "/" # Localização do workflow YAML
+  schedule:
+    interval: "daily"
+permissions:
+  contents: read
