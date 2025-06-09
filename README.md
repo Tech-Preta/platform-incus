@@ -2,6 +2,75 @@
 
 Uma plataforma de infraestrutura como código completa para deploy e gerenciamento de aplicações usando Incus, Vault, Kubernetes e outras tecnologias modernas.
 
+```mermaid
+flowchart TD
+  subgraph Infraestrutura
+    INCUS[Incus-LXD]
+    VAULT[HashiCorp-Vault]
+    GLAUTH[GLAuth-LDAP]
+    NET[RedesVirtuais]
+  end
+
+  subgraph ProvisionamentoTerraform
+    INCUSMOD[000-incus]
+    INFRAMOD[001-infra-services]
+    VAULTMOD[002-vault]
+    K8SMOD[010-kubernetes-cluster]
+    CRDSMOD[011-kubernetes-crds]
+    K8SCORE[012-kubernetes-core]
+    K8SSERV[013-kubernetes-services]
+    MOD[modules]
+  end
+
+  subgraph ClusterKubernetes
+    K8S[Kubernetes]
+    CILIUM[Cilium]
+    TRAEFIK[Traefik]
+    PROM[Prometheus-Grafana]
+    CERTMAN[Cert-Manager]
+    METALLB[MetalLB]
+    COREDNS[CoreDNS]
+    EXTDNS[ExternalDNS]
+    METRICS[MetricsServer]
+  end
+
+  subgraph Documentacao
+    DOCS[docs]
+  end
+
+  INCUS --> NET
+  INCUSMOD --> INCUS
+  INFRAMOD --> VAULT
+  INFRAMOD --> GLAUTH
+  VAULTMOD --> VAULT
+  K8SMOD --> K8S
+  CRDSMOD --> K8S
+  K8SCORE --> K8S
+  K8SSERV --> K8S
+  MOD --> INCUSMOD
+  MOD --> INFRAMOD
+  MOD --> VAULTMOD
+  MOD --> K8SMOD
+  MOD --> CRDSMOD
+  MOD --> K8SCORE
+  MOD --> K8SSERV
+  K8S --> CILIUM
+  K8S --> TRAEFIK
+  K8S --> PROM
+  K8S --> CERTMAN
+  K8S --> METALLB
+  K8S --> COREDNS
+  K8S --> EXTDNS
+  K8S --> METRICS
+
+  DOCS -.-> INCUSMOD
+  DOCS -.-> INFRAMOD
+  DOCS -.-> VAULTMOD
+  DOCS -.-> K8SMOD
+  DOCS -.-> CRDSMOD
+  DOCS -.-> K8SSERV
+```
+
 ## 🎯 Visão Geral
 
 Este projeto implementa uma infraestrutura completa de desenvolvimento e produção usando:
