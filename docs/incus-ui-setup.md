@@ -1,5 +1,7 @@
 # Configuração de Certificados para Incus UI
 
+**Nota:** Neste documento, `[SEU_ENDERECO_IP_INCUS]` é usado como um placeholder. Substitua-o pelo endereço IP real da sua instância Incus.
+
 ## Arquivos Criados
 
 ### 1. Certificados
@@ -9,8 +11,9 @@
 
 ### 2. Token de Acesso (Nome: incus-ui)
 ```
-eyJjbGllbnRfbmFtZSI6ImluY3VzLXVpIiwiZmluZ2VycHJpbnQiOiI8UkVNT1ZFRF9TRUNSRVQifQ==
+SEU_TOKEN_DE_ACESSO_AQUI
 ```
+**Nota de Segurança:** O token de acesso é sensível. Trate-o como uma senha e armazene-o de forma segura. Não o exponha em documentação ou versionamento de código.
 
 ## Comandos Executados
 
@@ -28,8 +31,9 @@ rm -f incus-ui-cert.pem incus-ui-key.pem incus-ui-certificates.md
 # Criar certificado e chave no formato correto
 openssl req -x509 -newkey rsa:4096 -keyout incus-ui.key -out incus-ui.crt -days 365 -nodes -subj "/CN=incus-ui"
 
-# Criar arquivo .pfx para importar no browser (COM SENHA: 501917)
-openssl pkcs12 -export -out incus-ui.pfx -inkey incus-ui.key -in incus-ui.crt -passout pass:501917
+# Criar arquivo .pfx para importar no browser
+# **Nota de Segurança:** Ao criar o arquivo .pfx, escolha uma senha forte e armazene-a de forma segura, preferencialmente utilizando um gerenciador de senhas. Não compartilhe esta senha.
+openssl pkcs12 -export -out incus-ui.pfx -inkey incus-ui.key -in incus-ui.crt # Lembre-se de definir uma senha segura aqui!
 
 # Adicionar certificado ao Incus
 incus config trust add incus-ui.crt
@@ -54,9 +58,9 @@ ls -la incus-ui.*
    ```
 3. Clique no botão **Import** 
 4. Selecione o arquivo `incus-ui.pfx`
-5. Digite a senha: **501917**
+5. Digite a senha que você definiu durante a criação do .pfx
 6. Reinicie o browser
-7. Acesse `https://192.168.18.43:8443`
+7. Acesse `https://[SEU_ENDERECO_IP_INCUS]:8443`
 8. Selecione o certificado **Incus-UI** quando solicitado
 
 ### Para Firefox
@@ -64,21 +68,21 @@ ls -la incus-ui.*
 2. Vá em **Preferences** → **Privacy & Security** → **Certificates** → **View Certificates**
 3. Na aba **Your Certificates**, clique em **Import**
 4. Selecione o arquivo `incus-ui.pfx`
-5. Digite a senha: **501917**
+ 5. Digite a senha que você definiu durante a criação do .pfx
 6. Reinicie o browser
-7. Acesse `https://192.168.18.43:8443`
+7. Acesse `https://[SEU_ENDERECO_IP_INCUS]:8443`
 
 ## Informações da Conexão
 
-- **URL do Incus**: `https://192.168.18.43:8443`
+- **URL do Incus**: `https://[SEU_ENDERECO_IP_INCUS]:8443`
 - **Certificado**: `incus-ui.crt` (adicionado ao trust store do Incus)
-- **Arquivo para browser**: `incus-ui.pfx` (senha: **501917**)
+- **Arquivo para browser**: `incus-ui.pfx`
 - **Validade**: 365 dias (até junho de 2026)
 
 ## Status Final
 
 ✅ Certificados criados corretamente no formato esperado pelo Incus UI
-✅ Arquivo .pfx criado para importação no browser (senha: 501917)
+✅ Arquivo .pfx criado para importação no browser
 ✅ Certificado adicionado ao trust store do Incus
 ✅ Token de acesso gerado com nome 'incus-ui'
 
@@ -86,6 +90,6 @@ ls -la incus-ui.*
 
 1. Baixe o arquivo `incus-ui.pfx` para sua máquina local
 2. Importe o certificado no seu browser seguindo as instruções acima
-3. Acesse `https://192.168.18.43:8443` para usar a UI do Incus
+3. Acesse `https://[SEU_ENDERECO_IP_INCUS]:8443` para usar a UI do Incus
 4. Use o token gerado se necessário para autenticação adicional
 
