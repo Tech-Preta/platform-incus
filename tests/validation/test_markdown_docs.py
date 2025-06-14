@@ -1,10 +1,8 @@
 import pytest
-import os
 import re
 from pathlib import Path
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 import requests
-from bs4 import BeautifulSoup
 import markdown
 
 @pytest.fixture
@@ -74,14 +72,14 @@ class TestMarkdownSyntax:
             content = md_file.read_text(encoding='utf-8')
             headers = header_pattern.findall(content)
 
-            if not headers:
-                continue
-
             prev_level = 0
             for header_marks, title in headers:
                 current_level = len(header_marks)
                 if prev_level > 0 and current_level > prev_level + 1:
-                    pytest.fail(f"{md_file}: Header '{title}' skips levels (from {prev_level} to {current_level})")
+                    pytest.fail(
+                        f"{md_file}: Header '{title}' skips levels "
+                        f"(from {prev_level} to {current_level})"
+                    )
                 prev_level = current_level
 
     def test_no_trailing_whitespace(self, markdown_files):
@@ -103,11 +101,10 @@ class TestMarkdownLinks:
             content = md_file.read_text(encoding='utf-8')
             links = link_pattern.findall(content)
 
-            for link_text, link_url in links:
+            for _, link_url in links:
                 if link_url.startswith(('http://', 'https://', 'mailto:', '#')):
                     continue
 
-                # Handle relative paths
                 if link_url.startswith('./'):
                     link_path = md_file.parent / link_url[2:]
                 elif link_url.startswith('../'):
@@ -116,7 +113,10 @@ class TestMarkdownLinks:
                     link_path = md_file.parent / link_url
 
                 if not link_path.exists():
-                    pytest.fail(f"{md_file}: Internal link '{link_url}' points to non-existent file")
+                    pytest.fail(
+                        f"{md_file}: Internal link '{link_url}' points "
+                        "to non-existent file"
+                    )
 
     @patch('requests.head')
     def test_external_links_accessible(self, mock_head, markdown_files):
@@ -128,12 +128,10 @@ class TestMarkdownLinks:
             content = md_file.read_text(encoding='utf-8')
             links = link_pattern.findall(content)
 
-            for link_text, link_url in links:
-                try:
-                    mock_head.assert_called_with(link_url, timeout=10)
-                except AssertionError:
-                    # If not called yet, call it now
-                    mock_head(link_url, timeout=10)
+            for _, link_url in links:
+                response = requests.head(link_url, timeout=10)
+                mock_head.assert_called_with(link_url, timeout=10)
+                assert response.status_code == 200
 
     def test_no_broken_anchor_links(self, markdown_files):
         """Test that anchor links point to existing headers."""
@@ -145,16 +143,18 @@ class TestMarkdownLinks:
             headers = header_pattern.findall(content)
             anchors = anchor_pattern.findall(content)
 
-            # Convert headers to anchor format
             header_anchors = []
             for _, header_text in headers:
                 anchor = re.sub(r'[^\w\s-]', '', header_text.lower())
                 anchor = re.sub(r'[\s_-]+', '-', anchor)
                 header_anchors.append(anchor)
 
-            for anchor_text, anchor_id in anchors:
+            for _, anchor_id in anchors:
                 if anchor_id not in header_anchors:
-                    pytest.fail(f"{md_file}: Anchor link '#{anchor_id}' points to non-existent header")
+                    pytest.fail(
+                        f"{md_file}: Anchor link '#{anchor_id}' points "
+                        "to non-existent header"
+                    )
 
 class TestMarkdownContentQuality:
     """Test markdown content quality and formatting."""
@@ -167,9 +167,11 @@ class TestMarkdownContentQuality:
             content = md_file.read_text(encoding='utf-8')
             code_blocks = code_block_pattern.findall(content)
 
-            for i, lang in enumerate(code_blocks):
+            for i, lang in enumerate(code_blocks, 1):
                 if not lang:
-                    pytest.fail(f"{md_file}: Code block {i+1} missing language specification")
+                    pytest.fail(
+                        f"{md_file}: Code block {i} missing language specification"
+                    )
 
     def test_no_duplicate_headers(self, markdown_files):
         """Test that there are no duplicate headers at the same level."""
@@ -179,19 +181,20 @@ class TestMarkdownContentQuality:
             content = md_file.read_text(encoding='utf-8')
             headers = header_pattern.findall(content)
 
-            # Group headers by level
             headers_by_level = {}
             for header_marks, title in headers:
                 level = len(header_marks)
                 headers_by_level.setdefault(level, []).append(title.strip())
 
-            # Check for duplicates at each level
             for level, titles in headers_by_level.items():
                 seen = set()
                 for title in titles:
-                    if title.lower() in seen:
-                        pytest.fail(f"{md_file}: Duplicate header '{title}' at level {level}")
-                    seen.add(title.lower())
+                    key = title.lower()
+                    if key in seen:
+                        pytest.fail(
+                            f"{md_file}: Duplicate header '{title}' at level {level}"
+                        )
+                    seen.add(key)
 
     def test_proper_list_formatting(self, markdown_files):
         """Test that lists use consistent formatting."""
@@ -200,9 +203,7 @@ class TestMarkdownContentQuality:
             lines = content.splitlines()
 
             for line_num, line in enumerate(lines, 1):
-                # Check for mixed list markers
                 if re.match(r'^\s*[-*+]\s', line):
-                    # This is a list item, check consistency in context
                     pass  # Could add more specific checks here
 
 class TestMarkdownEdgeCases:
@@ -274,7 +275,6 @@ class TestMarkdownIntegration:
             except Exception as e:
                 validation_results.append((md_file, False, str(e)))
 
-        # All files should pass basic validation
-        failed_files = [f for f, success, error in validation_results if not success]
+        failed_files = [f for f, success, _ in validation_results if not success]
         if failed_files:
             pytest.fail(f"Validation failed for files: {failed_files}")
