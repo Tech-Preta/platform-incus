@@ -1,5 +1,5 @@
 terraform {
-  required_version = "~> 1.9.3"
+  required_version = "~> 1.9.3" # Downgraded to ensure compatibility with legacy modules. Consider centralizing this constraint if used across multiple files.
   required_providers {
     kubernetes = {
       source  = "hashicorp/kubernetes"
