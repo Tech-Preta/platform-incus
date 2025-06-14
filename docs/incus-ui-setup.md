@@ -33,7 +33,7 @@ openssl req -x509 -newkey rsa:4096 -keyout incus-ui.key -out incus-ui.crt -days 
 
 # Criar arquivo .pfx para importar no browser
 # **Nota de Segurança:** Ao criar o arquivo .pfx, escolha uma senha forte e armazene-a de forma segura, preferencialmente utilizando um gerenciador de senhas. Não compartilhe esta senha.
-openssl pkcs12 -export -out incus-ui.pfx -inkey incus-ui.key -in incus-ui.crt # Lembre-se de definir uma senha segura aqui!
+openssl pkcs12 -export -out incus-ui.pfx -inkey incus-ui.key -in incus-ui.crt
 
 # Adicionar certificado ao Incus
 incus config trust add incus-ui.crt
