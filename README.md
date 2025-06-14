@@ -196,6 +196,8 @@ export LDAP_BIND_DN="cn=granato,dc=nataliagranato,dc=xyz"
 export LDAP_BIND_PASSWORD="sua-senha-aqui"
 ```
 
+**Importante:** O arquivo `.env` contém informações sensíveis e **não deve ser commitado** no repositório Git. Certifique-se de que ele esteja listado no seu arquivo `.gitignore`. Para ambientes de produção, considere o uso de um sistema de gerenciamento de segredos mais robusto integrado ao seu pipeline de CI/CD.
+
 ### Redes
 
 A plataforma usa as seguintes redes:

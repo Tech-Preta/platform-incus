@@ -17,17 +17,17 @@ terraform {
 }
 
 provider "kubernetes" {
-  config_path = "/home/nataliagranato/Downloads/platform-locals/terraform/010-kubernetes-cluster/kubeconfig"
+  config_path = var.kubernetes_config_path
 }
 
 provider "helm" {
   kubernetes {
-    config_path = "/home/nataliagranato/Downloads/platform-locals/terraform/010-kubernetes-cluster/kubeconfig"
+    config_path = var.helm_config_path
   }
 }
 
 provider "vault" {
-  address = "https://10.191.1.2:8200"
+  address = var.vault_address
   # token   = "<REMOVED_SECRET>"
 
   skip_tls_verify = true
