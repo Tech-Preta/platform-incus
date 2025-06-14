@@ -3,10 +3,7 @@ import json
 import yaml
 import tempfile
 import os
-from pathlib import Path
-from unittest.mock import patch, mock_open, MagicMock
-import io
-from typing import Dict, Any
+from unittest.mock import patch, mock_open
 
 # Import the configuration validation module (adjust import path as needed)
 # from your_project.config_validation import ConfigValidator, ValidationError
@@ -37,20 +34,20 @@ def valid_json_config():
 def valid_yaml_config():
     """Fixture providing a valid YAML configuration."""
     return """
-    database:
-      host: localhost
-      port: 5432
-      name: testdb
-      user: testuser
-      password: testpass
-    api:
-      base_url: https://api.example.com
-      timeout: 30
-      retries: 3
-    logging:
-      level: INFO
-      format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-    """
+database:
+  host: localhost
+  port: 5432
+  name: testdb
+  user: testuser
+  password: testpass
+api:
+  base_url: https://api.example.com
+  timeout: 30
+  retries: 3
+logging:
+  level: INFO
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+"""
 
 @pytest.fixture
 def temp_config_file():
