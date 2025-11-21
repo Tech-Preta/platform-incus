@@ -30,7 +30,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5.0.1 # mantido o tag estável correspondente ao SHA que estava anteriormente
+        uses: actions/checkout@v6.0.0 # mantido o tag estável correspondente ao SHA que estava anteriormente
 
       # Initializes the CodeQL tools for scanning.
       - name: Initialize CodeQL
